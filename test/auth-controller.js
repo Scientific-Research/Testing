@@ -45,11 +45,28 @@ describe("Auth Controller - Login", function () {
           password: "123456",
           name: "Test",
           posts: [],
+          _id: "655e881d6e882877785a5cfd",
         });
         return user.save();
       })
       .then(() => {
-        
+        const req = { userId: "655e881d6e882877785a5cfd" };
+        const res = {
+          statusCode: 500,
+          userStatus: null,
+          status: function (code) {
+            this.statusCode = code;
+            return this;
+          },
+          json: function (data) {
+            this.userStatus = data.status;
+          },
+        };
+        AuthController.getUserStatus(req, res, () => {}).then(() => {
+          expect(res.statusCode).to.be.equal(200);
+          expect(res.userStatus).to.be.equal("I am new!");
+          done();
+        });
       })
       .catch((err) => console.log(err));
   });
