@@ -31,4 +31,14 @@ describe("Auth middleware", function () {
     };
     expect(authMiddleware.bind(this, req, {}, () => {})).to.throw();
   });
+  it("should yield a userId after decoding the token", function () {
+    const req = {
+      get: function (headerName) {
+        return "Bearer klhdfgkjdhfgjdfgjsdklfgj";
+      },
+    };
+    // expect(authMiddleware.bind(this, req.userId, {}, () => {})).to.throw();
+    authMiddleware(req, {}, () => {});
+    expect(req).to.have.property("userId");
+  });
 });
